@@ -1,0 +1,6 @@
+name: 'Quote fetcher'
+type: module
+description: 'Fetches quotes from the web.'
+package: Custom
+core_version_requirement: ^9 || ^10
+version: VERSION

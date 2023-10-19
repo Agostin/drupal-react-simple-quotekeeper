@@ -1,0 +1,3 @@
+administer api_connection settings:
+  title: 'Administer API connection settings'
+  restrict access: true

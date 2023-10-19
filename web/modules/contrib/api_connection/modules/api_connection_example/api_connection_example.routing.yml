@@ -1,0 +1,15 @@
+api_connection_example.req_res_login:
+  path: '/api_connection_example/login'
+  defaults:
+    _controller: '\Drupal\api_connection_example\Controller\ReqResController::login'
+    _title: 'REQ|RES API example'
+  requirements:
+    _permission: 'access content'
+api_connection_example.req_res_user_details:
+  path: '/api_connection_example/reqres/{id}'
+  defaults:
+    _controller: '\Drupal\api_connection_example\Controller\ReqResController::userDetail'
+    _title: 'REQ|RES API example'
+    id: 1
+  requirements:
+    _permission: 'access content'

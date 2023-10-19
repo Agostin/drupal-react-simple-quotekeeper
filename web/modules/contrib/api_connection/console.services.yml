@@ -1,0 +1,10 @@
+services:
+  api_connection.console_command.rest_api:
+    class: Drupal\api_connection\Command\Generate\RestApiConnectionCommand
+    arguments: ['@api_connection.plugin_generator.rest_api', '@console.extension_manager', '@console.validator', '@console.string_converter', '@console.chain_queue']
+    tags:
+      - { name: drupal.command }
+  api_connection.plugin_generator.rest_api:
+    class: Drupal\api_connection\Generator\RestApiConnectionGenerator
+    tags:
+      - { name: drupal.generator }

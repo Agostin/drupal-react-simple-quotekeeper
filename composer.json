@@ -16,8 +16,10 @@
     ],
     "require": {
         "composer/installers": "^2.0",
+        "drupal/api_connection": "^1.0@alpha",
         "drupal/core-composer-scaffold": "^10.1",
-        "drupal/core-recommended": "^10.1"
+        "drupal/core-recommended": "^10.1",
+        "drupal/restui": "^1.21"
     },
     "conflict": {
         "drupal/drupal": "*"

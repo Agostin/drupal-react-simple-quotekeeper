@@ -1,0 +1,13 @@
+name: API Connection example code
+description: Example code for the API Connection module.
+package: Web services
+type: module
+core_version_requirement: ^9
+hidden: TRUE
+dependencies:
+  - api_connection:api_connection
+
+# Information added by Drupal.org packaging script on 2022-12-19
+version: '1.0.0-alpha7'
+project: 'api_connection'
+datestamp: 1671443199

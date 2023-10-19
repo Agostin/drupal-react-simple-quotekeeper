@@ -1,0 +1,2 @@
+enable_logging: true
+environment: 'dev'

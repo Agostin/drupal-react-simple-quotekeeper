@@ -1,0 +1,11 @@
+# Schema for API Connection settings.
+api_connection.settings:
+  type: config_object
+  label: 'API Connection Settings'
+  mapping:
+    enable_logging:
+      type: boolean
+      label: 'Enable API call logging'
+    environment:
+      type: string
+      label: 'The current environment'
