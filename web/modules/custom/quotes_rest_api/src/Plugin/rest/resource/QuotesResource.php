@@ -25,14 +25,23 @@
      * Responds to entity GET requests.
      * @return \Drupal\rest\ResourceResponse
      */
-    public function get($limit = 10) {
-      // Fetch a maximum of 50 quotes each request
-      if ($limit > 50) $limit = 50;
-      else if ($limit < 1) $limit = 1;
+    // public function get() {
+    // }
 
+    /**
+     * Responds to entity POST requests.
+     * @return \Drupal\rest\ResourceResponse
+     */
+    // public function post() {}
+
+    /**
+     * Suggests random quotes.
+     * @return \Drupal\rest\ResourceResponse
+     */
+    public function getRandomQuote() {
       try {
         $client = new Client();
-        $guzzleResponse = $client->get("https://api.quotable.io/quotes/random?limit=$limit");
+        $guzzleResponse = $client->get("https://type.fit/api/quotes");
 
         if ($guzzleResponse->getStatusCode() == 200) {
           return new ResourceResponse(['content' => json_decode($guzzleResponse->getBody(), true)]);
