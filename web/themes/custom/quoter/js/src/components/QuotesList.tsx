@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Quote from './Quote'
+import { IQuote } from '../../types';
 
 const QuotesList = () => {
-  const [quotes, setQuotes] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [quotes, setQuotes] = useState<Array<IQuote>>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
 
   const fetchQuotesList = async () => {
+    setIsLoading(true)
     try {
       const response = await fetch('/quotes_rest_api/quotes_resource');
       const data = await response.json()
@@ -19,6 +21,7 @@ const QuotesList = () => {
     } catch (e) {
       setError('Error')
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -36,7 +39,7 @@ const QuotesList = () => {
             {
               error ||
               <ul>
-                {quotes.map(({ _id: key, author, content, tags }) => <Quote {...{ author, content, key, tags }} />)}
+                {quotes.map(({ _id, author, content, tags }) => <Quote key={_id} {...{ _id, author, content, tags }} />)}
               </ul>
             }
           </>
