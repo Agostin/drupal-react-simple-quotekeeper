@@ -1,0 +1,22 @@
+<?php
+
+namespace Drupal\{{ module_name }}\Plugin\RestApiConnection;
+
+use Drupal\api_connection\Plugin\RestApiConnectionBase;
+
+/**
+ * REST API connection for {{ name }}
+ *
+ * @RestApiConnection(
+ *   id = "{{ machine_name }}",
+ *   label = @Translation("{{ name }}"),
+ *   urls = {
+ *     "dev" = "{{ dev_url }}",
+ *     "test" = "{{ test_url }}",
+ *     "live" = "{{ live_url }}"
+ *   }
+ * )
+ */
+class {{ class_name }} extends RestApiConnectionBase {
+
+}

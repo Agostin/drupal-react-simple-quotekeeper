@@ -1,0 +1,11 @@
+name: API Connection
+description: Helper module that provides generic API connection functionality.
+package: Web services
+type: module
+core_version_requirement: ^9 || ^10
+configure: api_connection.settings_form
+
+# Information added by Drupal.org packaging script on 2022-12-19
+version: '1.0.0-alpha7'
+project: 'api_connection'
+datestamp: 1671443199

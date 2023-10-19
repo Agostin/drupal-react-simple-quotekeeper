@@ -1,0 +1,5 @@
+api_connection.settings_form:
+  title: 'API Connection settings'
+  route_name: api_connection.settings_form
+  description: 'Configure the API Connection module'
+  parent: system.admin_config_services
