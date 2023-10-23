@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
+import { IQuote } from '../../../types';
+import LoadingIcon from '../LoadingIcon';
 
-const QuoteForm = () => {
+const QuoteForm = ({
+  onNewNoteSubmitted
+}: {
+  onNewNoteSubmitted: (quote: IQuote) => void
+}) => {
   const [sessionToken, setSessionToken] = useState<string>('')
   const [newQuote, setNewQuote] = useState({
     content: '',
     author: ''
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
   const handleChange = (evt: any, field: 'author' | 'content') => {
@@ -28,6 +35,7 @@ const QuoteForm = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    setIsLoading(true)
     try {
       const response = await fetch('/api/quote/new?_format=json', {
         method: 'POST',
@@ -38,8 +46,8 @@ const QuoteForm = () => {
         },
         body: JSON.stringify(newQuote)
       });
-      const data = await response.json()
-      console.log(data)
+      // note: the best approach would be to lift-up the response stored on DB instead of the input data
+      onNewNoteSubmitted(newQuote)
 
       if (response.status === 200) {
         setNewQuote({
@@ -52,6 +60,7 @@ const QuoteForm = () => {
     } catch (e) {
       setError('Error')
     }
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -87,7 +96,10 @@ const QuoteForm = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white rounded-full px-4 py-2">Add Quote</button>
+        <button type="submit" className={`inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-blue-500 hover:bg-blue-400 transition ease-in-out duration-150 ${isLoading ? 'cursor-not-allowed' : ''}`} disabled={isLoading}>
+          {isLoading && <LoadingIcon />}
+          Add Quote
+        </button>
       </form>
     </>
   );

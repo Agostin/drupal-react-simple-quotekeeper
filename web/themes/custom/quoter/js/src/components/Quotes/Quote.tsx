@@ -1,4 +1,4 @@
-import { IQuote } from "../../types"
+import { IQuote } from "../../../types"
 
 const Quote = ({ author, content }: IQuote) => {
   return (

@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client'
 
-import QuotesList from './components/QuotesList'
-import QuoteForm from './components/QuoteForm';
+import QuotesList from './components/Quotes/QuotesList'
+import QuoteSuggester from './components/Quotes/QuoteSuggester';
 
 ReactDOM.createRoot(
   document.getElementById('react-app') as HTMLElement).render(
     <React.StrictMode>
       <>
-        <QuoteForm />
+        <QuoteSuggester />
         <QuotesList />
       </>
     </React.StrictMode>,

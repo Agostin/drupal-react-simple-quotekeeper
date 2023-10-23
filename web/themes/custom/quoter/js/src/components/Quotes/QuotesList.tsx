@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { IQuote } from '../../types';
+import { IQuote } from '../../../types';
 
+import QuoteForm from './QuoteForm';
 import Quote from './Quote'
 
 const QuotesList = () => {
@@ -30,27 +31,10 @@ const QuotesList = () => {
     setIsLoading(false)
   }
 
-  const suggestQuotes = async () => {
-    setIsLoading(true)
-    try {
-      const response = await fetch('/api/quotes/random?_format=json', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic QWdvc3Rpbm86c3BhcmtmYWJyaWs='
-        }
-      });
-      const data = await response.json()
-      console.log(data)
+  const onNewNoteSubmittedHandler = (quote: IQuote): void => {
+    if (!quote.content) return
 
-      if (response.status === 200) {
-        setQuotes(data.content)
-      } else {
-        setError('Error')
-      }
-    } catch (e) {
-      setError('Error')
-    }
-    setIsLoading(false)
+    setQuotes([ quote, ...quotes ])
   }
 
   useEffect(() => {
@@ -60,7 +44,7 @@ const QuotesList = () => {
   return (
     <>
       <h1 className='text-3xl mb-4'>Quotes List</h1>
-
+      <QuoteForm onNewNoteSubmitted={(newQuote: IQuote) => onNewNoteSubmittedHandler(newQuote)} />
       {
         isLoading ?
           <p>Loading...</p> :
@@ -68,10 +52,10 @@ const QuotesList = () => {
             {
               error ||
               <>
-                <button onClick={suggestQuotes} className="bg-blue-500 text-white rounded-full px-4 py-2">Suggest quote</button>
                 <ul className='grid gap-4 grid-span-full md:grid-cols-2 lg:grid-cols-3'>
                   {quotes.map(({ author, content }, i) => {
                     const key = `quote__${author.toLowerCase().replace(/ /g, '_')}__${i}`
+
                     return <Quote key={key} {...{ author, content }} />
                   })}
                 </ul>
