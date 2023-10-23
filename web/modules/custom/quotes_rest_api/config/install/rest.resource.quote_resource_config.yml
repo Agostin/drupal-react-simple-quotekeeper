@@ -7,3 +7,22 @@ configuration:
       - json
     supported_auth:
       - basic_auth
+      - cookie
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - basic_auth
+      - cookie
+  DELETE:
+    supported_formats:
+      - json
+    supported_auth:
+      - basic_auth
+      - cookie
+  PATCH:
+    supported_formats:
+      - json
+    supported_auth:
+      - basic_auth
+      - cookie

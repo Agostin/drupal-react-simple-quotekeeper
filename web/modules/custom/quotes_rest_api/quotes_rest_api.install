@@ -1,11 +1,12 @@
 <?php
 
 /**
- * Implement hook_schema().
- *  */
+ * Implementation of hook_schema().
+ */
 
 function custom_form_schema() {
-  $schema['quotes'] = [
+  $schema = array();
+  $schema['quotes'] = array(
     'description' => '',
     'fields' => [
       'id' => [
@@ -28,7 +29,7 @@ function custom_form_schema() {
       ],
     ],
     'primary key' => ['id']
-  ];
+  );
 
   return $schema;
 }
