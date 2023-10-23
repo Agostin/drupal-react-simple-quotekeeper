@@ -1,4 +1,4 @@
 export interface IQuote {
   author: string
-  text: string
+  content: string
 }
