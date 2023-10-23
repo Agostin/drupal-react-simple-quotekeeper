@@ -1,5 +1,5 @@
-id: quotes_resource_config
-plugin_id: quotes_resource
+id: quote_resource_config
+plugin_id: quote_resource
 granularity: method
 configuration:
   GET:
