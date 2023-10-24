@@ -1,4 +1,5 @@
 export interface IQuote {
+  id?: string
   author: string
   content: string
 }

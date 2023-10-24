@@ -1,18 +1,45 @@
 import { IQuote } from "../../../types"
 import { BiCopy, BiTrash } from 'react-icons/bi'
+import { useSessionContext } from "../../context/SessionContext"
 
 const Quote = ({
+  id,
   author,
   content,
-  className
-}: IQuote & { className?: string }) => {
+  className,
+  onNoteDeleted
+}: IQuote & {
+  className?: string;
+  onNoteDeleted: (id: string) => void
+}) => {
+  const { sessionToken } = useSessionContext()
+
   const copyOnClipboard = async () => {
-    // there are better ways to handle this...
     navigator.clipboard.writeText(`${content}\n(${author})`)
       .then(() => alert('Quote copied in the clipboard!'))
   }
-  const deleteNote = () => {
 
+  const deleteNote = async () => {
+    try {
+      const response = await fetch('/api/quotes?_format=json', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': sessionToken
+        },
+        body: JSON.stringify({ id })
+      });
+      const data = await response.json()
+
+      if (response.status === 200 && data.delete_count > 0) {
+        onNoteDeleted(id!)
+        return true
+      } else {
+        return false
+      }
+    } catch (e) {
+      return false
+    }
   }
 
   const buttonsClassName = 'text-slate-700 hover:text-slate-900 transition-colors duration-300'
