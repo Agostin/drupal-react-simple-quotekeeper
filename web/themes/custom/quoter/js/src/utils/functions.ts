@@ -12,7 +12,6 @@ export const callAddNewQuoteApi = async ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Basic QWdvc3Rpbm86c3BhcmtmYWJyaWs=',
           'X-CSRF-Token': sessionToken
         },
         body: JSON.stringify(body)

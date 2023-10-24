@@ -21,8 +21,7 @@ const QuotesList = () => {
     try {
       const response = await fetch('/api/quotes?_format=json', {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic QWdvc3Rpbm86c3BhcmtmYWJyaWs='
+          'Content-Type': 'application/json'
         }
       });
       const data = await response.json()
@@ -47,8 +46,9 @@ const QuotesList = () => {
   const onNewNoteSubmittedHandler = (quote: IQuote): void => {
     if (!quote.content) return
 
-    setQuotes([ quote, ...quotes ])
-    setFilteredQuotes(quotes)
+    const updatedQuotesArray = [ quote, ...quotes ]
+    setQuotes(updatedQuotesArray)
+    setFilteredQuotes(updatedQuotesArray)
   }
 
   const handleKeyboardSearch = (evt: any) => {
@@ -56,7 +56,7 @@ const QuotesList = () => {
 
     if (keyword.length > 2) {
       const filteredQuotes = quotes.filter(
-        (q: IQuote) => q.content.indexOf(keyword) !== -1 || q.author.indexOf(keyword) !== -1
+        (q: IQuote) => q.content.toLowerCase().indexOf(keyword) !== -1 || q.author.toLowerCase().indexOf(keyword) !== -1
       )
       setFilteredQuotes(filteredQuotes)
     } else {
@@ -71,9 +71,16 @@ const QuotesList = () => {
     })
 
     if (quoteHasBeenAdded) {
-      setQuotes([ suggestionToStoreAsQuote,  ...quotes ])
-      setFilteredQuotes(quotes)
+      const updatedQuotesArray = [ suggestionToStoreAsQuote,  ...quotes ]
+      setQuotes(updatedQuotesArray)
+      setFilteredQuotes(updatedQuotesArray)
     }
+  }
+
+  const onNoteDeletedHandler = (id: string) => {
+    const updatedQuotesArray = quotes.filter((q: IQuote) => q.id !== id)
+    setQuotes(updatedQuotesArray)
+    setFilteredQuotes(updatedQuotesArray)
   }
 
   useEffect(() => {
@@ -97,17 +104,22 @@ const QuotesList = () => {
             <p className='text-xl'>Loading quotes...</p>
           </div> :
           <>
-            {
-              error ||
+            {error ||
               <>
-                <h2 className="text-xl font-bold mb-2 mt-8">Your quotes list:</h2>
-                <ul className='grid gap-4 grid-span-full md:grid-cols-2 lg:grid-cols-3'>
-                  {filteredQuotes.map(({ author, content }, i) => {
-                    const key = `quote__${author.toLowerCase().replace(/ /g, '_')}__${i}`
+                {
+                  filteredQuotes.length === 0 ?
+                  <p className='text-lg'>Your list is empty. Let's start adding a new quote!</p> :
+                  <>
+                    <h2 className="text-xl font-bold mb-2 mt-8">Your quotes list:</h2>
+                    <ul className='grid gap-4 grid-span-full md:grid-cols-2 lg:grid-cols-3'>
+                      {filteredQuotes.map(({ id, author, content }, i) => {
+                        const key = `quote__${author.toLowerCase().replace(/ /g, '_')}__${i}`
 
-                    return <Quote key={key} {...{ author, content }} />
-                  })}
-                </ul>
+                        return <Quote {...{ id, key, author, content }} onNoteDeleted={onNoteDeletedHandler} />
+                      })}
+                    </ul>
+                  </>
+                }
               </>
             }
           </>
