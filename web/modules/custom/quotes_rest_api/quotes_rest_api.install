@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Implementation of hook_schema().
+ */
+
+function custom_form_schema() {
+  $schema = array();
+  $schema['quotes'] = array(
+    'description' => '',
+    'fields' => [
+      'id' => [
+        'description' => 'Unique quote id',
+        'type' => 'serial',
+        'not null' => true,
+        'unsigned' => true
+      ],
+      'content' => [
+        'description' => 'Quote text content',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => true,
+      ],
+      'author' => [
+        'description' => 'Quote\'s author',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => false,
+      ],
+    ],
+    'primary key' => ['id']
+  );
+
+  return $schema;
+}

@@ -1,11 +1,16 @@
-.social-bar {
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-.site-header__initial {
-  display: none;
+/* For IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-#block-quoter-site-branding {
-  background: none;
+[type="search"],
+[type="text"],
+textarea {
+  min-height: auto;
 }

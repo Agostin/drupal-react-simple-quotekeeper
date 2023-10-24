@@ -2,9 +2,7 @@ const path = require('path');
 const isDevMode = process.env.NODE_ENV !== 'production';
 
 const config = {
-  entry: {
-    main: ["./js/src/index.jsx"]
-  },
+  entry: './js/src/index.tsx',
   devtool: (isDevMode) ? 'source-map' : false,
   mode: (isDevMode) ? 'development' : 'production',
   output: {
@@ -12,7 +10,7 @@ const config = {
     filename: '[name].min.js'
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {
     rules: [
@@ -21,7 +19,13 @@ const config = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         include: path.join(__dirname, 'js/src'),
-      }
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+        include: path.join(__dirname, 'js/src'),
+      },
     ],
   },
 };

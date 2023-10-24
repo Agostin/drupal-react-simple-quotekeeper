@@ -1,6 +1,5 @@
-name: 'Quote fetcher'
-type: module
-description: 'Fetches quotes from the web.'
+name: Quotes REST API
+description: Define's a custom REST Resource
 package: Custom
+type: module
 core_version_requirement: ^9 || ^10
-version: VERSION
