@@ -1,22 +1,33 @@
 import { IQuote } from "../../../types"
+import { BiCopy, BiTrash } from 'react-icons/bi'
 
 const Quote = ({
   author,
-  content
-}: IQuote) => {
+  content,
+  className
+}: IQuote & { className?: string }) => {
   const copyOnClipboard = async () => {
+    // there are better ways to handle this...
     navigator.clipboard.writeText(`${content}\n(${author})`)
-      .then(() => alert('Copied!'))
+      .then(() => alert('Quote copied in the clipboard!'))
+  }
+  const deleteNote = () => {
+
   }
 
+  const buttonsClassName = 'text-slate-700 hover:text-slate-900 transition-colors duration-300'
+
   return (
-    <div className="relative bg-white rounded-lg shadow-md p-4">
-      <div className="absolute flex items-center justify-between right-3 top-3">
-        <button type="button" className="text-slate-500 hover:text-slate-400" onClick={copyOnClipboard}>
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M13 10.75h-1.25a2 2 0 0 0-2 2v8.5a2 2 0 0 0 2 2h8.5a2 2 0 0 0 2-2v-8.5a2 2 0 0 0-2-2H19"></path><path d="M18 12.25h-4a1 1 0 0 1-1-1v-1.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1.5a1 1 0 0 1-1 1ZM13.75 16.25h4.5M13.75 19.25h4.5"></path></svg>
+    <div className={`relative bg-white rounded-lg shadow-md p-4 border border-slate-300 ${className}`}>
+      <div className="absolute flex items-center justify-between gap-x-1 right-3 top-4">
+        <button type="button" className={buttonsClassName} onClick={copyOnClipboard}>
+          <BiCopy size={20} />
+        </button>
+        <button type="button" className={buttonsClassName} onClick={deleteNote}>
+          <BiTrash size={20} className="fill-red-500 hover:fill-red-700" />
         </button>
       </div>
-      <div className="w-11/12">
+      <div className="flex flex-col justify-between w-10/12 h-full">
         <blockquote className="text-lg font-semibold mb-2">{content}</blockquote>
         <em className="text-sm text-gray-600">({author})</em>
       </div>

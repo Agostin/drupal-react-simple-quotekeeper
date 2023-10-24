@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IQuote } from '../../../types';
-import LoadingIcon from '../LoadingIcon';
+import { useSessionContext } from '../../context/SessionContext';
+
+import { ImSpinner3 } from 'react-icons/im';
+import { callAddNewQuoteApi } from '../../utils/functions';
 
 const QuoteForm = ({
   onNewNoteSubmitted
 }: {
   onNewNoteSubmitted: (quote: IQuote) => void
 }) => {
-  const [sessionToken, setSessionToken] = useState<string>('')
   const [newQuote, setNewQuote] = useState({
     content: '',
     author: ''
   });
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
+  const { sessionToken } = useSessionContext()
 
   const handleChange = (evt: any, field: 'author' | 'content') => {
     const value = evt.target.value
@@ -23,81 +26,58 @@ const QuoteForm = ({
     })
   }
 
-  const fetchSessionToken = async () => {
-    const response = await fetch('/session/token')
-    const token = await response.text()
-
-    if (response.status === 200) {
-      setSessionToken(token)
-    }
-  }
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
     setIsLoading(true)
-    try {
-      const response = await fetch('/api/quote/new?_format=json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic QWdvc3Rpbm86c3BhcmtmYWJyaWs=',
-          'X-CSRF-Token': sessionToken
-        },
-        body: JSON.stringify(newQuote)
-      });
+
+    const quoteHasBeenAdded = await callAddNewQuoteApi({ sessionToken, body: newQuote })
+    if (quoteHasBeenAdded) {
       // note: the best approach would be to lift-up the response stored on DB instead of the input data
       onNewNoteSubmitted(newQuote)
-
-      if (response.status === 200) {
-        setNewQuote({
-          content: '',
-          author: ''
-        });
-      } else {
-        setError('Error')
-      }
-    } catch (e) {
+      // reset quote form
+      setNewQuote({
+        content: '',
+        author: ''
+      });
+    } else {
       setError('Error')
     }
+
     setIsLoading(false)
   };
-
-  useEffect(() => {
-    if (!sessionToken) {
-      fetchSessionToken()
-    }
-  }, [])
 
   return (
     <>
       {error && <p className='mb-3 text-red-500'>{error}</p>}
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-4 my-4">
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-4 my-5">
+        <h3 className="text-lg font-bold mb-1">Add a new quote</h3>
         <div className="mb-4">
-          <label htmlFor="content" className="block text-lg font-semibold mb-2">Content</label>
+          {/* <label htmlFor="content" className="block text-md font-semibold mb-2">Content</label> */}
           <textarea
             id="content"
             name="content"
+            placeholder="Type the Quote's content here"
             value={newQuote.content}
             onChange={() => handleChange(event, 'content')}
-            className="w-full p-2 border rounded-md"
+            className="w-full px-3 py-2 bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 shadow-sm rounded-lg resize-none min-h-[6rem]"
             required
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="author" className="block text-lg font-semibold mb-2">Author</label>
+          {/* <label htmlFor="author" className="block text-md font-semibold mb-2">Author</label> */}
           <input
             id="author"
             name="author"
             type="text"
+            placeholder="Type the Quote's author"
             value={newQuote.author}
             onChange={() => handleChange(event, 'author')}
-            className="w-full p-2 border rounded-md"
+            className="w-full h-12 p-4 bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 shadow-sm rounded-lg"
             required
           />
         </div>
-        <button type="submit" className={`inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-blue-500 hover:bg-blue-400 transition ease-in-out duration-150 ${isLoading ? 'cursor-not-allowed' : ''}`} disabled={isLoading}>
-          {isLoading && <LoadingIcon />}
+        <button type="submit" className={`inline-flex gap-x-2 items-center px-4 py-2 font-semibold leading-6 text-md shadow rounded-md text-white bg-green-500 hover:bg-green-400 transition ease-in-out duration-150 ${isLoading ? 'cursor-not-allowed' : ''}`} disabled={isLoading}>
+          {isLoading && <ImSpinner3 size={20} className="animate-spin" />}
           Add Quote
         </button>
       </form>

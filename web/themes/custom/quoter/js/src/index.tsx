@@ -2,14 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client'
 
 import QuotesList from './components/Quotes/QuotesList'
-// import QuoteSuggester from './components/Quotes/QuoteSuggester';
+import { SessionContextProvider } from './context/SessionContext';
 
 ReactDOM.createRoot(
   document.getElementById('react-app') as HTMLElement).render(
     <React.StrictMode>
-      <>
-        {/* <QuoteSuggester /> */}
+      <SessionContextProvider>
         <QuotesList />
-      </>
+      </SessionContextProvider>
     </React.StrictMode>,
 );

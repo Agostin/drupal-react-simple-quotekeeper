@@ -16,9 +16,23 @@
     {% include '@olivero/includes/preload.twig' with { olivero_path: olivero_path } only %}
     {{ noscript_styles }}
     <script src="https://cdn.tailwindcss.com"></script>
+
     {# TailwindCSS config goes here #}
     <script>
       tailwind.config = {
+        theme: {
+           extend: {
+            animation: {
+              fade: 'fadeOut .5s ease-in-out',
+            },
+            keyframes: theme => ({
+              fadeOut: {
+                '0%': { display: 'block' },
+                '100%': { display: 'none' },
+              },
+            }),
+          },
+        }
       }
     </script>
   </head>
