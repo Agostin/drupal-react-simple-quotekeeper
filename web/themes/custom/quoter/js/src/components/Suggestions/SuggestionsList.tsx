@@ -8,9 +8,11 @@ const SuggestionsList = ({
 }: {
   handleSelectSuggestionEvent: (suggestion: ISuggestion) => void
 }) => {
+  const [loading, setLoading] = useState<boolean>(false)
   const [suggestions, setSuggestions] = useState<ISuggestion[]>([])
 
   const suggestNewQuotes = async () => {
+    setLoading(true)
     try {
       const response = await fetch('/api/quote/random?_format=json');
       const data = await response.json()
@@ -19,6 +21,11 @@ const SuggestionsList = ({
     } catch (e) {
       setSuggestions([])
     }
+    setLoading(false)
+  }
+
+  const handleRemoveSuggestionEvent = (text: string) => {
+    setSuggestions(suggestions.filter((s: ISuggestion) => s.text !== text))
   }
 
   useEffect(() => {
@@ -28,13 +35,21 @@ const SuggestionsList = ({
   return <div className="bg-slate-200 py-8 mb-2 rounded-lg shadow">
     <div className="px-4 mb-3 mt-1">
       <h3 className="text-lg font-bold mb-1">Need some inspiration?</h3>
-      <p>Try with one of the following famous quotes!</p>
+      {
+        !loading && <p className='text-lg'>
+          {suggestions.length ? 'Try with one of the following famous quotes!' : "Sorry, but we don't have suggestions today 😔" }
+        </p>
+      }
     </div>
     <div className="relative w-full flex gap-8 px-4 snap-x overflow-x-auto no-scrollbar">
       {suggestions.map(({ author, text }, i) => {
         const key = `suggestion__${author.replace(/ /g, '-').toLowerCase().trim()}__${i}`
 
-        return <Suggestion {...{ key, author, text }} onSuggestionSelected={() => handleSelectSuggestionEvent({ author, text })} />
+        return <Suggestion
+          {...{ key, author, text }}
+          onSuggestionSelected={() => handleSelectSuggestionEvent({ author, text })}
+          onSuggestionRemoved={(text: string) => handleRemoveSuggestionEvent(text)}
+        />
       })}
     </div>
   </div>

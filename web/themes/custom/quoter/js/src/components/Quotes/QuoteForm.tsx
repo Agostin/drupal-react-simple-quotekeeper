@@ -52,7 +52,6 @@ const QuoteForm = ({
       <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-4 my-5">
         <h3 className="text-lg font-bold mb-1">Add a new quote</h3>
         <div className="mb-4">
-          {/* <label htmlFor="content" className="block text-md font-semibold mb-2">Content</label> */}
           <textarea
             id="content"
             name="content"
@@ -64,7 +63,6 @@ const QuoteForm = ({
           />
         </div>
         <div className="mb-4">
-          {/* <label htmlFor="author" className="block text-md font-semibold mb-2">Author</label> */}
           <input
             id="author"
             name="author"

@@ -6,9 +6,11 @@ import { AiFillCloseCircle } from 'react-icons/ai'
 const Suggestion = ({
   author,
   text,
-  onSuggestionSelected
+  onSuggestionRemoved,
+  onSuggestionSelected,
 }: ISuggestion & {
-  onSuggestionSelected: () => void
+  onSuggestionRemoved: (key: string) => void;
+  onSuggestionSelected: () => void;
 }) => {
   const [alreadySuggested, setAlreadySuggested] = useState<boolean>(false)
   const [hide, setHide] = useState<boolean>(false)
@@ -21,13 +23,18 @@ const Suggestion = ({
     onSuggestionSelected()
   }
 
+  const onSuggestionRemovedHandler = () => {
+    setHide(true)
+    onSuggestionRemoved(text)
+  }
+
   return (
     <div className={cardClassName}>
       <div className="absolute flex items-center justify-between gap-x-1 right-3 top-4">
         {!alreadySuggested && <button type="button" className={buttonsClassName} onClick={onSuggestionSelectedHandler}>
           <LuClipboardCopy size={20} />
         </button>}
-        <button type="button" className={buttonsClassName} onClick={() => setHide(true)}>
+        <button type="button" className={buttonsClassName} onClick={onSuggestionRemovedHandler}>
           <AiFillCloseCircle size={20} />
         </button>
       </div>
