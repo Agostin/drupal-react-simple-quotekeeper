@@ -20,16 +20,25 @@ use Symfony\Component\HttpFoundation\Request;
  * )
  */
 class QuoteResource extends ResourceBase {
+
+  protected $table_name = 'quotes';
+
   /**
    * Responds to entity GET requests.
    * @return \Drupal\rest\ResourceResponse
    */
    public function get() {
-    $query = \Drupal::database()->query("SELECT id, content, author FROM {quotes} ORDER BY id DESC");
+    $query = \Drupal::database()->query("SELECT id, content, author FROM {$this->table_name} ORDER BY id DESC");
     $result = $query->fetchAll();
     $response = ['content' => json_encode($result)];
 
-    return new ResourceResponse($response);
+    $build = array(
+      '#cache' => array(
+        'max-age' => 0,
+      ),
+    );
+
+    return (new ResourceResponse($response))->addCacheableDependency($build);
   }
 
   /**
@@ -40,7 +49,7 @@ class QuoteResource extends ResourceBase {
     $data = json_decode($request->getContent());
 
     $result = \Drupal::database()
-      ->insert('quotes')
+      ->insert($this->table_name)
       ->fields([
         'author' => $data->author,
         'content' => $data->content,
@@ -54,5 +63,14 @@ class QuoteResource extends ResourceBase {
    * Responds to entity DELETE requests.
    * @return \Drupal\rest\ResourceResponse
    */
-  public function delete() {}
+  public function delete(Request $request) {
+    $data = json_decode($request->getContent());
+
+    $num_deleted = \Drupal::database()
+      ->delete($this->table_name)
+      ->condition('id', $data->id)
+      ->execute();
+
+    return new ResourceResponse(['delete_count' => $num_deleted]);
+  }
 }
