@@ -1,0 +1,6 @@
+quotes_rest_api.random:
+  path: '/api/quote/random'
+  defaults:
+    _controller: '\Drupal\quotes_rest_api\Controller\QuoteResourceController::getRandomQuotes'
+  requirements:
+    _access: 'TRUE'

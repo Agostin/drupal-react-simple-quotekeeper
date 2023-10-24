@@ -54,24 +54,5 @@ class QuoteResource extends ResourceBase {
    * Responds to entity DELETE requests.
    * @return \Drupal\rest\ResourceResponse
    */
-  // public function delete() {}
-
-  /**
-   * Suggests random quotes.
-   * @return \Drupal\rest\ResourceResponse
-   */
-  public function getRandomQuotes() {
-    try {
-      $client = new Client();
-      $guzzleResponse = $client->get("https://type.fit/api/quotes");
-
-      if ($guzzleResponse->getStatusCode() == 200) {
-        return new ResourceResponse(['content' => json_decode($guzzleResponse->getBody(), true)]);
-      }
-    } catch (RequestException $e) {
-      return new ResourceResponse(['error' => 'Oops! Something went wrong']);
-    } catch(Exception $e) {
-      return new ResourceResponse(['error' => 'Oops! Something went wrong']);
-    }
-  }
+  public function delete() {}
 }
