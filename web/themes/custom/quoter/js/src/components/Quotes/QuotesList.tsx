@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IQuote, ISuggestion } from '../../../types';
 import { useSessionContext } from '../../context/SessionContext';
 import { callAddNewQuoteApi } from '../../utils/functions';
@@ -16,7 +16,7 @@ const QuotesList = () => {
 
   const { sessionToken } = useSessionContext()
 
-  const fetchStoredQuotes = async () => {
+  const fetchStoredQuotes = useCallback(async () => {
     setIsLoading(true)
     try {
       const response = await fetch('/api/quotes?_format=json', {
@@ -41,17 +41,9 @@ const QuotesList = () => {
       setError('Error')
     }
     setIsLoading(false)
-  }
+  }, [])
 
-  const onNewNoteSubmittedHandler = (quote: IQuote): void => {
-    if (!quote.content) return
-
-    const updatedQuotesArray = [ quote, ...quotes ]
-    setQuotes(updatedQuotesArray)
-    setFilteredQuotes(updatedQuotesArray)
-  }
-
-  const handleKeyboardSearch = (evt: any) => {
+  const handleKeyboardSearch = useCallback((evt: any) => {
     const keyword = evt.target.value
 
     if (keyword.length > 2) {
@@ -62,25 +54,33 @@ const QuotesList = () => {
     } else {
       setFilteredQuotes(quotes)
     }
-  }
+  }, [])
 
-  const addSuggestionToQuotesList = async (suggestion: ISuggestion) => {
-    const suggestionToStoreAsQuote = { ...suggestion, content: suggestion.text }
-    const quoteHasBeenAdded = await callAddNewQuoteApi({
-      sessionToken, body: suggestionToStoreAsQuote
-    })
+  const onNewNoteSubmittedHandler = (quote: IQuote): void => {
+    if (!quote.content) return
 
-    if (quoteHasBeenAdded) {
-      const updatedQuotesArray = [ suggestionToStoreAsQuote,  ...quotes ]
-      setQuotes(updatedQuotesArray)
-      setFilteredQuotes(updatedQuotesArray)
-    }
+    const updatedQuotesArray = [ quote, ...quotes ]
+    setQuotes(updatedQuotesArray)
+    setFilteredQuotes(updatedQuotesArray)
   }
 
   const onNoteDeletedHandler = (id: string) => {
     const updatedQuotesArray = quotes.filter((q: IQuote) => q.id !== id)
     setQuotes(updatedQuotesArray)
     setFilteredQuotes(updatedQuotesArray)
+  }
+
+  const addSuggestionToQuotesList = async (suggestion: ISuggestion) => {
+    const suggestionToStoreAsQuote = { ...suggestion, content: suggestion.text }
+    const newQuoteId = await callAddNewQuoteApi({
+      sessionToken, body: suggestionToStoreAsQuote
+    })
+
+    if (!!newQuoteId) {
+      const updatedQuotesArray = [ { ...suggestionToStoreAsQuote, id: newQuoteId },  ...quotes ]
+      setQuotes(updatedQuotesArray)
+      setFilteredQuotes(updatedQuotesArray)
+    }
   }
 
   useEffect(() => {

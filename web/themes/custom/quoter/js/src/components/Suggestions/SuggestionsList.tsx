@@ -32,7 +32,7 @@ const SuggestionsList = ({
     suggestNewQuotes()
   }, [])
 
-  return <div className="bg-slate-200 py-8 mb-2 rounded-lg shadow">
+  return <div className="bg-slate-200 py-6 mb-2 rounded-lg shadow">
     <div className="px-4 mb-3 mt-1">
       <h3 className="text-lg font-bold mb-1">Need some inspiration?</h3>
       {
@@ -41,7 +41,7 @@ const SuggestionsList = ({
         </p>
       }
     </div>
-    <div className="relative w-full flex gap-8 px-4 snap-x overflow-x-auto no-scrollbar">
+    <div className="relative w-full flex gap-8 px-4 py-2 snap-x overflow-x-auto no-scrollbar">
       {suggestions.map(({ author, text }, i) => {
         const key = `suggestion__${author.replace(/ /g, '-').toLowerCase().trim()}__${i}`
 
