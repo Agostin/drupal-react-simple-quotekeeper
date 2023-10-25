@@ -56,7 +56,7 @@ class QuoteResource extends ResourceBase {
       ])
       ->execute();
 
-    return new ResourceResponse(['content' => $response]);
+    return new ResourceResponse(['content' => $result]);
   }
 
   /**

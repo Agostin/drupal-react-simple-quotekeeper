@@ -30,15 +30,12 @@ const QuoteForm = ({
     e.preventDefault();
     setIsLoading(true)
 
-    const quoteHasBeenAdded = await callAddNewQuoteApi({ sessionToken, body: newQuote })
-    if (quoteHasBeenAdded) {
-      // note: the best approach would be to lift-up the response stored on DB instead of the input data
-      onNewNoteSubmitted(newQuote)
-      // reset quote form
-      setNewQuote({
-        content: '',
-        author: ''
-      });
+    const body = { ...newQuote, author: newQuote.author || 'Unknown' }
+    const newQuoteId = await callAddNewQuoteApi({ sessionToken, body })
+    if (!!newQuoteId) {
+      onNewNoteSubmitted({ ...body, id: newQuoteId })
+      // Reset UI
+      setNewQuote({ content: '', author: '' });
     } else {
       setError('Error')
     }
@@ -71,7 +68,6 @@ const QuoteForm = ({
             value={newQuote.author}
             onChange={() => handleChange(event, 'author')}
             className="w-full h-12 p-4 bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 shadow-sm rounded-lg"
-            required
           />
         </div>
         <button type="submit" className={`inline-flex gap-x-2 items-center px-4 py-2 font-semibold leading-6 text-md shadow rounded-md text-white bg-green-500 hover:bg-green-400 transition ease-in-out duration-150 ${isLoading ? 'cursor-not-allowed' : ''}`} disabled={isLoading}>

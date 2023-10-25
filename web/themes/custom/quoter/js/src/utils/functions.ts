@@ -18,11 +18,12 @@ export const callAddNewQuoteApi = async ({
       });
 
       if (response.status === 200) {
-        return true
+        const data = await response.json()
+        return data.content as string
       } else {
-        return false
+        return ''
       }
     } catch (e) {
-      return false
+      return ''
     }
 }
