@@ -43,7 +43,7 @@ const QuotesList = () => {
     setIsLoading(false)
   }, [])
 
-  const handleKeyboardSearch = useCallback((evt: any) => {
+  const handleKeyboardSearch = (evt: any) => {
     const keyword = evt.target.value
 
     if (keyword.length > 2) {
@@ -54,7 +54,7 @@ const QuotesList = () => {
     } else {
       setFilteredQuotes(quotes)
     }
-  }, [])
+  }
 
   const onNewNoteSubmittedHandler = (quote: IQuote): void => {
     if (!quote.content) return
